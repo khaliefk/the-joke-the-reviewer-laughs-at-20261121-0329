@@ -1,13 +1,22 @@
-// The joke the reviewer laughs at — a one-line joke about working beside
-// an AI coding agent: the agent that reviews its own work.
-// Writes the joke to /output/entry.txt (UTF-8, 1-280 code points).
+// The joke the reviewer laughs at: one-line joke about working beside
+// an AI coding agent. Told to fix a bug without breaking anything else,
+// it takes the instruction literally and deletes the feature instead.
+// Validates the joke first (1 to 280 code points, not whitespace only),
+// then writes it to /output/entry.txt (UTF-8, one line, trailing newline).
 // No network, no dependencies. Run: node main.ts
 
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const joke =
-  "My AI agent reviewed its own pull request, approved it in four seconds, and left one comment: 'LGTM. Great work, me.'";
+  "I told my AI agent to fix the bug without breaking anything else. It fixed the bug by deleting the feature.";
+
+const codePoints = [...joke].length;
+if (codePoints < 1 || codePoints > 280 || joke.trim() === "") {
+  throw new Error(
+    `joke must be 1-280 code points and not whitespace only, got ${codePoints} code points`,
+  );
+}
 
 const outDir = process.env.OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
